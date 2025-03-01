@@ -3,7 +3,6 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Pins;
 using Domain.Services;
-using System.ComponentModel.DataAnnotations;
 
 namespace Application.Services;
 
@@ -26,7 +25,7 @@ public class AccountService
     public Account CreateAccount(string accountNumber, string pin, decimal initialBalance)
     {
         if (string.IsNullOrWhiteSpace(accountNumber))
-            throw new ValidationException("Account number is required.");
+            throw new Exception("Account number is required.");
 
         var pinValueObject = new Pin(pin);
         var account = new Account(accountNumber, pinValueObject, initialBalance);
@@ -47,7 +46,7 @@ public class AccountService
     public decimal GetBalance(string accountNumber, string pin)
     {
         Account? account = _accountRepository.GetByAccountNumber(accountNumber) ??
-                           throw new ValidationException("Account not found.");
+                           throw new Exception("Account not found.");
 
         var pinValueObject = new Pin(pin);
         _accountDomainService.VerifyPin(account, pinValueObject);
@@ -61,7 +60,7 @@ public class AccountService
     public void Withdraw(string accountNumber, string pin, decimal amount)
     {
         Account? account = _accountRepository.GetByAccountNumber(accountNumber) ??
-                           throw new ValidationException("Account not found.");
+                           throw new Exception("Account not found.");
 
         var pinValueObject = new Pin(pin);
         _accountDomainService.VerifyPin(account, pinValueObject);
@@ -76,7 +75,7 @@ public class AccountService
     public void Deposit(string accountNumber, string pin, decimal amount)
     {
         Account? account = _accountRepository.GetByAccountNumber(accountNumber) ??
-                           throw new ValidationException("Account not found.");
+                           throw new Exception("Account not found.");
 
         var pinValueObject = new Pin(pin);
         _accountDomainService.VerifyPin(account, pinValueObject);
@@ -91,7 +90,7 @@ public class AccountService
     public IEnumerable<Operation> GetOperationsHistory(string accountNumber, string pin)
     {
         Account? account = _accountRepository.GetByAccountNumber(accountNumber) ??
-                           throw new ValidationException("Account not found.");
+                           throw new Exception("Account not found.");
 
         var pinValueObject = new Pin(pin);
         _accountDomainService.VerifyPin(account, pinValueObject);
@@ -108,7 +107,7 @@ public class AccountService
     public void DeleteAccount(string accountNumber)
     {
         Account? account = _accountRepository.GetByAccountNumber(accountNumber) ??
-                           throw new ValidationException("Account not found.");
+                           throw new Exception("Account not found.");
 
         _accountRepository.Delete(accountNumber);
     }
@@ -116,7 +115,7 @@ public class AccountService
     public void ChangePin(string accountNumber, string oldPin, string newPin)
     {
         Account? account = _accountRepository.GetByAccountNumber(accountNumber) ??
-                           throw new ValidationException("Account not found.");
+                           throw new Exception("Account not found.");
 
         var oldPinToVerify = new Pin(oldPin);
         _accountDomainService.VerifyPin(account, oldPinToVerify);
