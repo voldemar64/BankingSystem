@@ -1,6 +1,5 @@
 using Application.Interfaces;
 using Domain.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace Application.Services;
 
@@ -19,14 +18,14 @@ public class AdminService
 
         if (admin == null || !admin.VerifyPassword(password))
         {
-            throw new ValidationException("Invalid admin password.");
+            throw new ArgumentException("Invalid admin password.");
         }
     }
 
     public void ChangeAdminPassword(string oldPassword, string newPassword)
     {
         Admin? admin = _adminRepository.GetAdmin() ??
-                       throw new ValidationException("Admin not found.");
+                       throw new ArgumentException("Admin not found.");
 
         admin.ChangePassword(newPassword);
         _adminRepository.UpdateAdmin(admin);
